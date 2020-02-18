@@ -1,0 +1,52 @@
+<html>
+
+<head>
+<title>Assignment 1</title>
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+<script src="../libs/gl-matrix/gl-matrix.js"></script>
+<script src="../libs/jquery-3.4.1/jquery-3.4.1.min.js"></script>
+<script src=figures.js></script>
+
+<script type="text/javascript">
+    $(document).ready(
+			function() {
+                let canvas = document.getElementById("webglcanvas");
+                
+                let gl = initWebGL(canvas);
+                initGL(gl, canvas);
+		        initViewport(gl, canvas);
+                initShader(gl);
+
+                let square = createSquare(gl);
+                let triangle = createTriangle(gl);
+                let rhombus = createRhombus(gl);
+                let circle = createCircle(gl, 0.5);
+
+                mat4.identity(modelViewMatrix);
+                mat4.translate(modelViewMatrix, modelViewMatrix, [-1.0, 0.60, -4]);
+                draw(gl, square);
+                
+                mat4.identity(modelViewMatrix);
+                mat4.translate(modelViewMatrix, modelViewMatrix, [1, 0.60, -4]);
+                draw(gl, triangle);
+
+                mat4.identity(modelViewMatrix);
+                mat4.translate(modelViewMatrix, modelViewMatrix, [-1.0, -0.30, -4]);
+                draw(gl, rhombus);
+
+                mat4.identity(modelViewMatrix);
+                mat4.translate(modelViewMatrix, modelViewMatrix, [1.0, -0.75, -4]);
+                draw(gl, circle);
+			}
+	);
+</script>
+
+</head>
+
+<!-- All WebGL rendering takes place in a context. This structure is provided in the HTML5 Canvas element. -->
+<body>
+    <canvas id="webglcanvas" style="border: none;" width="800px" height="600px" ></canvas>
+</body>
+
+</html>
+
