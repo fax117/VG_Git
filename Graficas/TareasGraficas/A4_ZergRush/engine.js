@@ -5,7 +5,9 @@ raycaster = null,
 root = null,
 floorGroup = null,
 orbitControls = null,
-sphereList = [];
+wraithList = [],
+sphereList = [],
+lingList = [];
 objectList = [];
 
 let mouse = new THREE.Vector2(), INTERSECTED, CLICKED;
@@ -18,11 +20,12 @@ let currentTime = Date.now();
 
 let ambientLight = null;
 
-let mapUrl = "Models/textures/Floor/checkers.png";
+let mapUrl = "Models/textures/Floor/creep.jpg";
 let SHADOW_MAP_WIDTH = 2048, SHADOW_MAP_HEIGHT = 2048;
 
 let objModelUrl = {obj: 'Models/source/haloWraith.obj', map:'Models/textures/HaloWraith/DefaultMaterial_Base_Color.png', normalMap: 'Models/textures/HaloWraith/DefaultMaterial_Normal_DirectX.png'}
-
+let bunkerUrl = {obj: 'Models/source/bunker.obj', map:'Models/textures/SC2_Bunker/Material _91_Base_Color.png', normalMap: 'Models/textures/SC2_Bunker/Material _91_Normal_DirectX.png'}
+let zerglingUrl = {obj: 'Models/source/cZergling.obj'}
 function promisifyLoader ( loader, onProgress ) 
 {
     function promiseLoader ( url ) {
@@ -42,7 +45,7 @@ function promisifyLoader ( loader, onProgress )
 
 const onError = ( ( err ) => { console.error( err ); } );
 
-async function loadObj(objModelUrl, objectList, posX, posY)
+async function loadObj(name, objModelUrl, objectList, scale)
 {
     const objPromiseLoader = promisifyLoader(new THREE.OBJLoader());
 
@@ -63,21 +66,17 @@ async function loadObj(objModelUrl, objectList, posX, posY)
             }
         });
 
-        object.scale.set(0.5, 0.5, 0.5);
-        object.position.y = posY;
-        object.position.x = posX;
+        object.scale.set(scale.x, scale.y, scale.z);
+        object.position.y = 0;
+        object.position.x = 0;
         object.position.z = 0;
+        object.rotation.x = Math.PI/2;
 
-        object.rotation.y = 0;
-
-        object.name = "objObject";
+        object.name = name;
         
         objectList.push(object);
         
-        scene.add(object);
-
-        
-
+        //scene.add(object);
     }
     catch (err) {
         return onError(err);
@@ -90,12 +89,12 @@ function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
 }
 
-function moveToCenter(){
-    let speed = 0.05;
-    sphereList.forEach(sphere => {
-        if(sphere.position != THREE.Vector3(0,0,0)){
-            let initPosX = sphere.position.x;
-            let initPosY = sphere.position.y;
+function moveToCenter(list){
+    let speed = 0.1;
+    list.forEach(elem => {
+        if(elem.position != THREE.Vector3(0,0,0)){
+            let initPosX = elem.position.x;
+            let initPosY = elem.position.y;
     
             let finPosX = 0;
             let finPosY = 0;
@@ -104,14 +103,16 @@ function moveToCenter(){
             targetNormalizedVector.x = finPosX - initPosX;
             targetNormalizedVector.y = finPosY - initPosY;
             targetNormalizedVector.normalize()
-    
-            sphere.translateOnAxis(targetNormalizedVector,speed);
+            elem.translateOnAxis(targetNormalizedVector,speed);
+
+            // Look to the same direction
+            
         }
         
     });
 }
 
-function run() 
+async function run() 
 {
     requestAnimationFrame( run );
     render();
@@ -123,7 +124,7 @@ function render()
     renderer.render( scene, camera );
 }
 
-function createScene(canvas){
+async function createScene(canvas){
     renderer = new THREE.WebGLRenderer( { canvas: canvas, antialias: true } );
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.shadowMap.enabled = true;
@@ -132,11 +133,11 @@ function createScene(canvas){
     scene = new THREE.Scene();
 
     camera = new THREE.PerspectiveCamera( 45, canvas.width / canvas.height, 1, 4000 );
-    camera.position.set(0,0,50); // Move here to change Camera position
+    camera.position.set(0,0,100); // Move here to change Camera position
     camera.lookAt(0,0,0);
     
-    /*orbitControls = new THREE.OrbitControls(camera, renderer.domElement);
-    orbitControls.update();*/
+    orbitControls = new THREE.OrbitControls(camera, renderer.domElement);
+    orbitControls.update();                     
 
     let light = new THREE.AmbientLight( 0xffffff, 1 );
     light.position.set( 0, 0, 0 );
@@ -146,23 +147,30 @@ function createScene(canvas){
     root = new THREE.Object3D;
 
     // Create the objects
-    // let posX = getRandomInt(-10, 10);
-    // let posY = getRandomInt(-10, 10); 
-    //loadObj(objModelUrl, objectList, posX, posY);
-       
+    let scale = new THREE.Vector3(0.05, 0.05, 0.05);
+    await loadObj("bunker", bunkerUrl, objectList, scale);
+    objectList[0].position.set(0,0,0);
+    root.add(objectList[0]);
+
+    scale = new THREE.Vector3(0.1, 0.1, 0.1)
+    await loadObj("wraith", objModelUrl, wraithList, scale);
+
+    scale = new THREE.Vector3(1.5, 1.5, 1.5)
+    await loadObj("zergling", zerglingUrl, lingList, scale);
 
     let geometry = new THREE.SphereGeometry( 1, 32, 32 );
 
-    for ( let i = 0; i < 20; i ++ ){
-        var material = new THREE.MeshLambertMaterial( {color: Math.random() * 0xffffff} );
-        var sphere = new THREE.Mesh( geometry, material );
+    for ( let i = 0; i < 5; i ++ ){
+        let material = new THREE.MeshLambertMaterial( {color: Math.random() * 0xffffff} );
+        let sphere = new THREE.Mesh( geometry, material );
         sphere.position.x = getRandomInt(-30, 30);
         sphere.position.y = getRandomInt(-30, 30);
         sphereList.push(sphere);
-        scene.add( sphere );
-    }
 
-    
+        
+        root.add( sphere );
+    }
+   
     // Create a floorGroup to hold the objects
     floorGroup = new THREE.Object3D;
     root.add(floorGroup);
@@ -175,7 +183,7 @@ function createScene(canvas){
     let color = 0xffffff;
 
     // Put in a ground plane
-    geometry = new THREE.PlaneGeometry(100, 100, 0, 0);
+    geometry = new THREE.PlaneGeometry(200, 200, 0, 0);
     let mesh = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial({color:color, map:map, side:THREE.DoubleSide}));
 
     mesh.castShadow = false;
@@ -198,7 +206,7 @@ function onDocumentMouseMove( event ) {
     // find intersections
     raycaster.setFromCamera( mouse, camera );
 
-    let intersects = raycaster.intersectObjects( scene.children );
+    let intersects = raycaster.intersectObjects( root.children );
     
     if ( intersects.length > 0 ) 
     {

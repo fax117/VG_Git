@@ -1,0 +1,100 @@
+# Blender MTL File: 'None'
+# Material Count: 7
+
+newmtl Material_#91
+Ns 9.000004
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Bump /home/fabricio/Downloads/SC2_Bunker/source/MasterClass/Texture/Material _91_Normal_DirectX.png
+map_Kd /home/fabricio/Downloads/SC2_Bunker/source/MasterClass/Texture/Material _91_Base_Color.png
+map_Ks /home/fabricio/Downloads/SC2_Bunker/source/MasterClass/Texture/Material _91_Metallic.png
+map_Ns /home/fabricio/Downloads/SC2_Bunker/source/MasterClass/Texture/Material _91_Roughness.png
+
+newmtl Material_#91.001
+Ns 9.000004
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Bump /home/fabricio/Downloads/SC2_Bunker/source/MasterClass/Texture/Material _91_Normal_DirectX.png
+map_Kd /home/fabricio/Downloads/SC2_Bunker/source/MasterClass/Texture/Material _91_Base_Color.png
+map_Ks /home/fabricio/Downloads/SC2_Bunker/source/MasterClass/Texture/Material _91_Metallic.png
+map_Ns /home/fabricio/Downloads/SC2_Bunker/source/MasterClass/Texture/Material _91_Roughness.png
+
+newmtl Material_#91.002
+Ns 9.000004
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Bump /home/fabricio/Downloads/SC2_Bunker/source/MasterClass/Texture/Material _91_Normal_DirectX.png
+map_Kd /home/fabricio/Downloads/SC2_Bunker/source/MasterClass/Texture/Material _91_Base_Color.png
+map_Ks /home/fabricio/Downloads/SC2_Bunker/source/MasterClass/Texture/Material _91_Metallic.png
+map_Ns /home/fabricio/Downloads/SC2_Bunker/source/MasterClass/Texture/Material _91_Roughness.png
+
+newmtl Material_#91.003
+Ns 9.000004
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Bump /home/fabricio/Downloads/SC2_Bunker/source/MasterClass/Texture/Material _91_Normal_DirectX.png
+map_Kd /home/fabricio/Downloads/SC2_Bunker/source/MasterClass/Texture/Material _91_Base_Color.png
+map_Ks /home/fabricio/Downloads/SC2_Bunker/source/MasterClass/Texture/Material _91_Metallic.png
+map_Ns /home/fabricio/Downloads/SC2_Bunker/source/MasterClass/Texture/Material _91_Roughness.png
+
+newmtl Material_#91.004
+Ns 9.000004
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Bump /home/fabricio/Downloads/SC2_Bunker/source/MasterClass/Texture/Material _91_Normal_DirectX.png
+map_Kd /home/fabricio/Downloads/SC2_Bunker/source/MasterClass/Texture/Material _91_Base_Color.png
+map_Ks /home/fabricio/Downloads/SC2_Bunker/source/MasterClass/Texture/Material _91_Metallic.png
+map_Ns /home/fabricio/Downloads/SC2_Bunker/source/MasterClass/Texture/Material _91_Roughness.png
+
+newmtl Material_#91.005
+Ns 9.000004
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Bump /home/fabricio/Downloads/SC2_Bunker/source/MasterClass/Texture/Material _91_Normal_DirectX.png
+map_Kd /home/fabricio/Downloads/SC2_Bunker/source/MasterClass/Texture/Material _91_Base_Color.png
+map_Ks /home/fabricio/Downloads/SC2_Bunker/source/MasterClass/Texture/Material _91_Metallic.png
+map_Ns /home/fabricio/Downloads/SC2_Bunker/source/MasterClass/Texture/Material _91_Roughness.png
+
+newmtl Material_#91.006
+Ns 9.000004
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Bump /home/fabricio/Downloads/SC2_Bunker/source/MasterClass/Texture/Material _91_Normal_DirectX.png
+map_Kd /home/fabricio/Downloads/SC2_Bunker/source/MasterClass/Texture/Material _91_Base_Color.png
+map_Ks /home/fabricio/Downloads/SC2_Bunker/source/MasterClass/Texture/Material _91_Metallic.png
+map_Ns /home/fabricio/Downloads/SC2_Bunker/source/MasterClass/Texture/Material _91_Roughness.png
