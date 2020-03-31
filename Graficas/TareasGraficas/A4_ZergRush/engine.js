@@ -115,7 +115,7 @@ function run()
 {
     requestAnimationFrame( run );
     render();
-    //moveToCenter(sphereList);
+    moveToCenter(sphereList);
 }
 
 function render() 
@@ -231,9 +231,6 @@ function onDocumentMouseDown(event)
     mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
     mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
 
-    console.log("Mouse x: " + mouse.x);
-    console.log("Mouse y: " + mouse.y);
-
     // find intersections
     raycaster.setFromCamera( mouse, camera );
 
@@ -243,8 +240,9 @@ function onDocumentMouseDown(event)
     if ( intersects.length > 0 ) 
     {
         CLICKED = intersects[ intersects.length - 1 ].object;
-        CLICKED.material.emissive.setHex( 0xffffff );
+        CLICKED.material.emissive.setHex( 0xff00ff );
         console.log(CLICKED.name);
+        scene.remove(CLICKED);  // Removes from Scene
     } 
     else 
     {
