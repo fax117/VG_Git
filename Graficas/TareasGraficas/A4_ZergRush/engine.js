@@ -75,8 +75,6 @@ async function loadObj(name, objModelUrl, objectList, scale)
         object.name = name;
         
         objectList.push(object);
-        
-        //scene.add(object);
     }
     catch (err) {
         return onError(err);
@@ -147,16 +145,16 @@ async function createScene(canvas){
     root = new THREE.Object3D;
 
     // Create the objects
-    let scale = new THREE.Vector3(0.05, 0.05, 0.05);
+    let scale = new THREE.Vector3(0.07, 0.07, 0.07);
     await loadObj("bunker", bunkerUrl, objectList, scale);
     objectList[0].position.set(0,0,0);
     root.add(objectList[0]);
 
-    scale = new THREE.Vector3(0.1, 0.1, 0.1)
-    await loadObj("wraith", objModelUrl, wraithList, scale);
+    scale = new THREE.Vector3(0.7, 0.7, 0.7)
+    await loadObj("wraith", objModelUrl, objectList, scale);
 
-    scale = new THREE.Vector3(1.5, 1.5, 1.5)
-    await loadObj("zergling", zerglingUrl, lingList, scale);
+    scale = new THREE.Vector3(1, 1, 1)
+    await loadObj("zergling", zerglingUrl, objectList, scale);
 
     let geometry = new THREE.SphereGeometry( 1, 32, 32 );
 
@@ -167,9 +165,25 @@ async function createScene(canvas){
         sphere.position.y = getRandomInt(-30, 30);
         sphereList.push(sphere);
 
-        
-        root.add( sphere );
+        scene.add( sphere );
+
+        // wraithList.push(objectList[1].clone());
+        lingList.push(objectList[2].clone());
     }
+    
+    // wraithList.forEach(wraith => {
+        // wraith.position.x = getRandomInt(-30, 30);
+        // wraith.position.y = getRandomInt(-30, 30);
+        // wraith.position.z = 0.7;
+        // scene.add(wraith);
+    // });
+    
+    lingList.forEach(ling => {
+        ling.position.x = getRandomInt(-30, 30);
+        ling.position.y = getRandomInt(-30, 30);
+        ling.position.z = 0;
+        scene.add(ling);
+    });
    
     // Create a floorGroup to hold the objects
     floorGroup = new THREE.Object3D;
@@ -206,7 +220,7 @@ function onDocumentMouseMove( event ) {
     // find intersections
     raycaster.setFromCamera( mouse, camera );
 
-    let intersects = raycaster.intersectObjects( root.children );
+    let intersects = raycaster.intersectObjects( scene.children );
     
     if ( intersects.length > 0 ) 
     {
