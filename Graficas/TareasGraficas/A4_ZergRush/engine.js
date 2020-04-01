@@ -31,15 +31,6 @@ let objModelUrl = {obj: 'Models/source/haloWraith.obj', map:'Models/textures/Hal
 let bunkerUrl = {obj: 'Models/source/bunker.obj', map:'Models/textures/SC2_Bunker/Material _91_Base_Color.png', normalMap: 'Models/textures/SC2_Bunker/Material _91_Normal_DirectX.png'}
 let zerglingUrl = {obj: 'Models/source/cZergling.obj'}
 
-
-// function initGame(){
-//     blocker = document.getElementById( 'blocker' );
-//     instructions = document.getElementById( 'instructions' );
-//     instructions.addEventListener( 'click', function () {
-//         controls.lock();
-//     }, false );
-// }
-
 function promisifyLoader ( loader, onProgress ) 
 {
     function promiseLoader ( url ) {
