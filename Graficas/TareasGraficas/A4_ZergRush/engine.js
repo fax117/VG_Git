@@ -10,13 +10,17 @@ sphereList = [],
 lingList = [];
 objectList = [];
 
+let blocker,  instructions;
+
+let speed = 1; 
+
 let mouse = new THREE.Vector2(), INTERSECTED, CLICKED;
 let radius = 100, theta = 0;
 
 let objLoader = null, jsonLoader = null;
 
 let duration = 20000; // ms
-let currentTime = Date.now();
+let today = new Date();
 
 let ambientLight = null;
 
@@ -26,6 +30,16 @@ let SHADOW_MAP_WIDTH = 2048, SHADOW_MAP_HEIGHT = 2048;
 let objModelUrl = {obj: 'Models/source/haloWraith.obj', map:'Models/textures/HaloWraith/DefaultMaterial_Base_Color.png', normalMap: 'Models/textures/HaloWraith/DefaultMaterial_Normal_DirectX.png'}
 let bunkerUrl = {obj: 'Models/source/bunker.obj', map:'Models/textures/SC2_Bunker/Material _91_Base_Color.png', normalMap: 'Models/textures/SC2_Bunker/Material _91_Normal_DirectX.png'}
 let zerglingUrl = {obj: 'Models/source/cZergling.obj'}
+
+
+// function initGame(){
+//     blocker = document.getElementById( 'blocker' );
+//     instructions = document.getElementById( 'instructions' );
+//     instructions.addEventListener( 'click', function () {
+//         controls.lock();
+//     }, false );
+// }
+
 function promisifyLoader ( loader, onProgress ) 
 {
     function promiseLoader ( url ) {
@@ -67,9 +81,6 @@ async function loadObj(name, objModelUrl, objectList, scale)
         });
 
         object.scale.set(scale.x, scale.y, scale.z);
-        object.position.y = 0;
-        object.position.x = 0;
-        object.position.z = 0;
         object.rotation.x = Math.PI/2;
 
         object.name = name;
@@ -84,23 +95,35 @@ async function loadObj(name, objModelUrl, objectList, scale)
 function getRandomInt(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
+    let rand = Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
+    if (rand < 30 && rand > -30){
+        return getRandomInt(min, max);
+    }
+    return rand
+}
+
+function resetPosition(object){
+    object.position.x = getRandomInt(-100, 100);
+    object.position.y = getRandomInt(-100, 100);
+
 }
 
 function moveToCenter(list){
-    let speed = 0.1;
     list.forEach(elem => {
         if(elem.position != THREE.Vector3(0,0,0)){
             let initPosX = elem.position.x;
             let initPosY = elem.position.y;
-    
+            let initPosZ = elem.position.z;
+
             let finPosX = 0;
             let finPosY = 0;
+            let finPosZ = 0;
             
             let targetNormalizedVector = new THREE.Vector3(0,0,0);
             targetNormalizedVector.x = finPosX - initPosX;
             targetNormalizedVector.y = finPosY - initPosY;
-            targetNormalizedVector.normalize()
+            targetNormalizedVector.z = initPosZ;
+            targetNormalizedVector.normalize();
             elem.translateOnAxis(targetNormalizedVector,speed);
 
             // Look to the same direction
@@ -110,11 +133,21 @@ function moveToCenter(list){
     });
 }
 
-async function run() 
-{
+function countdown(){
+    let currentTime = Date.now();
+    let desiredTime = today - currentTime;
+    
+    let timeLeft;
+    console.log(desiredTime);
+    document.getElementById('countdown').innerHTML = timeLeft;
+}
+
+function run() {
     requestAnimationFrame( run );
     render();
+    countdown();
     moveToCenter(sphereList);
+    moveToCenter(lingList);
 }
 
 function render() 
@@ -131,7 +164,7 @@ async function createScene(canvas){
     scene = new THREE.Scene();
 
     camera = new THREE.PerspectiveCamera( 45, canvas.width / canvas.height, 1, 4000 );
-    camera.position.set(0,0,100); // Move here to change Camera position
+    camera.position.set(0,0,75); // Move here to change Camera position
     camera.lookAt(0,0,0);
     
     orbitControls = new THREE.OrbitControls(camera, renderer.domElement);
@@ -150,25 +183,25 @@ async function createScene(canvas){
     objectList[0].position.set(0,0,0);
     root.add(objectList[0]);
 
-    scale = new THREE.Vector3(0.7, 0.7, 0.7)
-    await loadObj("wraith", objModelUrl, objectList, scale);
+    // scale = new THREE.Vector3(0.7, 0.7, 0.7)
+    // await loadObj("wraith", objModelUrl, objectList, scale);
 
     scale = new THREE.Vector3(1, 1, 1)
     await loadObj("zergling", zerglingUrl, objectList, scale);
 
     let geometry = new THREE.SphereGeometry( 1, 32, 32 );
 
-    for ( let i = 0; i < 5; i ++ ){
+    for ( let i = 0; i < 20; i ++ ){
         let material = new THREE.MeshLambertMaterial( {color: Math.random() * 0xffffff} );
         let sphere = new THREE.Mesh( geometry, material );
-        sphere.position.x = getRandomInt(-30, 30);
-        sphere.position.y = getRandomInt(-30, 30);
+        sphere.position.x = getRandomInt(-100, 100);
+        sphere.position.y = getRandomInt(-100, 100);
         sphereList.push(sphere);
 
         scene.add( sphere );
 
-        // wraithList.push(objectList[1].clone());
-        lingList.push(objectList[2].clone());
+        lingList.push(objectList[1].clone());
+         // wraithList.push(objectList[2].clone());
     }
     
     // wraithList.forEach(wraith => {
@@ -179,9 +212,10 @@ async function createScene(canvas){
     // });
     
     lingList.forEach(ling => {
-        ling.position.x = getRandomInt(-30, 30);
-        ling.position.y = getRandomInt(-30, 30);
-        ling.position.z = 0;
+        // color: Object { r: 0.43529411764705883, g: 0.3058823529411765, b: 0.3333333333333333 }
+        // colorWrite: true
+        ling.position.x = getRandomInt(-100, 100);
+        ling.position.y = getRandomInt(-100, 100);
         scene.add(ling);
     });
    
@@ -247,8 +281,7 @@ function onDocumentMouseMove( event ) {
     }
 }
 
-function onDocumentMouseDown(event)
-{
+function onDocumentMouseDown(event){
     event.preventDefault();
     mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
     mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
@@ -259,15 +292,13 @@ function onDocumentMouseDown(event)
     let intersects = raycaster.intersectObjects( scene.children );
 
     console.log("intersects", intersects);
-    if ( intersects.length > 0 ) 
-    {
+    if ( intersects.length > 0 ) {
         CLICKED = intersects[ intersects.length - 1 ].object;
         CLICKED.material.emissive.setHex( 0xff00ff );
         console.log(CLICKED.name);
-        scene.remove(CLICKED);  // Removes from Scene
+        resetPosition(CLICKED);
     } 
-    else 
-    {
+    else{
         if ( CLICKED ) 
             CLICKED.material.emissive.setHex( CLICKED.currentHex );
 
