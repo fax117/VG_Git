@@ -5,14 +5,14 @@ raycaster = null,
 root = null,
 floorGroup = null,
 orbitControls = null,
+score = 0,
+gameOver = false;
 wraithList = [],
 sphereList = [],
 lingList = [];
 objectList = [];
 
 let blocker,  instructions;
-
-let speed = 1; 
 
 let mouse = new THREE.Vector2(), INTERSECTED, CLICKED;
 let radius = 100, theta = 0;
@@ -96,7 +96,7 @@ function getRandomInt(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
     let rand = Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
-    if (rand < 30 && rand > -30){
+    if (rand < 30 && rand > -30){ 
         return getRandomInt(min, max);
     }
     return rand
@@ -105,11 +105,11 @@ function getRandomInt(min, max) {
 function resetPosition(object){
     object.position.x = getRandomInt(-100, 100);
     object.position.y = getRandomInt(-100, 100);
-
 }
 
 function moveToCenter(list){
     list.forEach(elem => {
+        let speed = Math.floor(getRandomInt(100, 200)) / 1000; 
         if(elem.position != THREE.Vector3(0,0,0)){
             let initPosX = elem.position.x;
             let initPosY = elem.position.y;
@@ -124,7 +124,7 @@ function moveToCenter(list){
             targetNormalizedVector.y = finPosY - initPosY;
             targetNormalizedVector.z = initPosZ;
             targetNormalizedVector.normalize();
-            elem.translateOnAxis(targetNormalizedVector,speed);
+            elem.translateOnAxis(targetNormalizedVector, speed);
 
             // Look to the same direction
             
@@ -143,11 +143,18 @@ function countdown(){
 }
 
 function run() {
-    requestAnimationFrame( run );
-    render();
-    countdown();
-    moveToCenter(sphereList);
-    moveToCenter(lingList);
+    checkGameOver();
+    if(!gameOver){
+        requestAnimationFrame( run );
+        render();
+        moveToCenter(sphereList);
+        checkIfNearBunker(sphereList);
+        moveToCenter(lingList);
+    }
+    else{
+        scene.stop();
+        document.getElementById('retry').hidden = false;
+    }
 }
 
 function render() 
@@ -167,8 +174,8 @@ async function createScene(canvas){
     camera.position.set(0,0,75); // Move here to change Camera position
     camera.lookAt(0,0,0);
     
-    orbitControls = new THREE.OrbitControls(camera, renderer.domElement);
-    orbitControls.update();                     
+    // orbitControls = new THREE.OrbitControls(camera, renderer.domElement);
+    // orbitControls.update();                     
 
     let light = new THREE.AmbientLight( 0xffffff, 1 );
     light.position.set( 0, 0, 0 );
@@ -296,6 +303,9 @@ function onDocumentMouseDown(event){
         CLICKED = intersects[ intersects.length - 1 ].object;
         CLICKED.material.emissive.setHex( 0xff00ff );
         console.log(CLICKED.name);
+        score ++;
+
+        document.getElementById("score").innerHTML = "Score: " + score;
         resetPosition(CLICKED);
     } 
     else{
@@ -303,5 +313,26 @@ function onDocumentMouseDown(event){
             CLICKED.material.emissive.setHex( CLICKED.currentHex );
 
         CLICKED = null;
+    }
+}
+
+function checkIfNearBunker(sphereList){
+
+    //Provisional collider :P
+
+    sphereList.forEach(sphere => {
+        if(sphere.position.x < 4 && sphere.position.x > -4 && sphere.position.y < 4 && sphere.position.y > -4){
+            resetPosition(sphere);
+            if(score != -1)
+                score--;
+        }
+    });
+
+    document.getElementById("score").innerHTML = "Score: " + score;
+}
+
+function checkGameOver(){
+    if(score <= -1){
+        gameOver = true;
     }
 }
